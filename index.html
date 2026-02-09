@@ -3,306 +3,348 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Growing the Forgiveness Project — HireLoki</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<title>Growing the Forgiveness Project — HireLoki Proposal</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--sage:#8fae8b;--gold:#c4a35a;--lavender:#b8a9c9;--white:#faf8f5;--text:#3a3a3a;--text-light:#6b6b6b}
-html,body{height:100%;overflow:hidden;font-family:'Inter',sans-serif;background:var(--white);color:var(--text)}
-h1,h2,h3{font-family:'Cormorant Garamond',serif;font-weight:600;color:var(--text)}
-
-/* Progress bar */
-#progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--sage),var(--gold));transition:width .4s ease;z-index:100}
-
-/* Slides */
-.deck{position:relative;width:100%;height:100%}
-.slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:2rem 3rem;opacity:0;pointer-events:none;transition:opacity .5s ease;text-align:center}
-.slide.active{opacity:1;pointer-events:auto}
-.slide.active .fade{animation:fadeUp .6s ease both}
-.slide.active .fade:nth-child(2){animation-delay:.15s}
-.slide.active .fade:nth-child(3){animation-delay:.3s}
-.slide.active .fade:nth-child(4){animation-delay:.45s}
-.slide.active .fade:nth-child(5){animation-delay:.6s}
-@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
-
-.slide h1{font-size:clamp(2rem,5vw,3.4rem);margin-bottom:.5rem;line-height:1.15}
-.slide h2{font-size:clamp(1.6rem,4vw,2.6rem);margin-bottom:1rem;line-height:1.2}
-.slide h3{font-size:clamp(1.1rem,2.5vw,1.5rem);margin-bottom:.8rem;color:var(--gold)}
-.slide p,.slide li{font-size:clamp(.9rem,1.8vw,1.1rem);line-height:1.7;color:var(--text-light);max-width:680px}
-.slide ul{text-align:left;list-style:none;padding:0;max-width:680px}
-.slide ul li{padding:.35rem 0;padding-left:1.2rem;position:relative}
-.slide ul li::before{content:'';position:absolute;left:0;top:.75rem;width:6px;height:6px;border-radius:50%;background:var(--sage)}
-
-.subtitle{font-family:'Inter',sans-serif;font-size:clamp(.95rem,2vw,1.2rem);color:var(--text-light);font-weight:300;margin-top:.3rem}
-.from{font-size:.9rem;color:var(--gold);margin-top:1.5rem;font-weight:500}
-.from a{color:var(--gold);text-decoration:none;border-bottom:1px solid var(--gold)}
-
-/* Decorative line */
-.divider{width:50px;height:2px;background:var(--gold);margin:1rem auto;border-radius:2px}
-
-/* Three pillars cards */
-.pillars{display:flex;gap:1.5rem;margin-top:1.2rem;flex-wrap:wrap;justify-content:center}
-.pillar{background:#fff;border-radius:12px;padding:1.5rem 1.2rem;flex:1;min-width:180px;max-width:240px;box-shadow:0 2px 12px rgba(0,0,0,.06);border-top:3px solid var(--sage);text-align:left}
-.pillar:nth-child(2){border-top-color:var(--gold)}
-.pillar:nth-child(3){border-top-color:var(--lavender)}
-.pillar h3{font-size:1.15rem;margin-bottom:.4rem}
-.pillar p{font-size:.88rem}
-
-/* Two-tier cards */
-.tiers{display:flex;gap:1.5rem;margin-top:1.2rem;flex-wrap:wrap;justify-content:center}
-.tier{background:#fff;border-radius:12px;padding:1.8rem 1.5rem;flex:1;min-width:240px;max-width:320px;box-shadow:0 2px 12px rgba(0,0,0,.06);text-align:left}
-.tier.featured{border:2px solid var(--gold)}
-.tier h3{font-size:1.2rem;margin-bottom:.6rem}
-.tier p,.tier li{font-size:.88rem}
-.tier ul{margin-top:.5rem}
-
+:root{
+  --bg:#faf8f5;--bg-alt:#f3efe9;--text:#2c2c2c;--text-dim:#6b6560;
+  --sage:#8fae8b;--sage-dim:rgba(143,174,139,.12);
+  --gold:#c4a35a;--gold-dim:rgba(196,163,90,.1);
+  --lavender:#b8a9c9;--lavender-dim:rgba(184,169,201,.12);
+  --font-heading:'Cormorant Garamond',Georgia,serif;
+  --font-body:'Inter',-apple-system,sans-serif;
+}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:var(--font-body);color:var(--text);background:var(--bg);overflow:hidden;height:100vh;width:100vw}
+.progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--sage),var(--gold),var(--lavender));z-index:100;transition:width .4s ease}
+.deck{height:100vh;width:100vw;position:relative}
+.slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .5s ease,transform .5s ease;transform:translateY(20px);padding:2rem}
+.slide.active{opacity:1;pointer-events:auto;transform:translateY(0)}
+.slide-inner{max-width:800px;width:100%;text-align:left}
+h1{font-family:var(--font-heading);font-size:clamp(2rem,5vw,3.2rem);font-weight:700;line-height:1.15;margin-bottom:.75rem;color:var(--text)}
+h2{font-family:var(--font-heading);font-size:clamp(1.6rem,3.5vw,2.4rem);font-weight:600;line-height:1.2;margin-bottom:.75rem}
+h3{font-family:var(--font-heading);font-size:1.3rem;font-weight:600;margin-bottom:.5rem}
+p,.desc{font-size:.95rem;line-height:1.7;color:var(--text-dim);margin-bottom:.75rem;font-weight:300}
+.label{font-family:var(--font-body);font-size:.7rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--sage);margin-bottom:.75rem;display:block}
+.accent{color:var(--gold)}
+.highlight{background:linear-gradient(transparent 65%,var(--gold-dim) 65%);padding:0 .15em}
+/* Title slide */
+.title-slide{text-align:center}
+.title-slide h1{font-size:clamp(2.2rem,6vw,3.6rem);margin-bottom:.5rem}
+.title-slide .subtitle{font-family:var(--font-heading);font-size:clamp(1rem,2vw,1.3rem);color:var(--text-dim);font-style:italic;font-weight:400;margin-bottom:2rem}
+.title-slide .from{font-size:.85rem;color:var(--sage);font-weight:500}
+/* Cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(200px,100%),1fr));gap:1.25rem;margin-top:1.25rem}
+.card{background:var(--bg-alt);border-radius:10px;padding:1.5rem;border-left:3px solid var(--sage)}
+.card.gold{border-left-color:var(--gold)}
+.card.lav{border-left-color:var(--lavender)}
+.card h3{font-size:1.1rem;margin-bottom:.4rem}
+.card p{font-size:.85rem;margin-bottom:0}
+/* Lists */
+ul{list-style:none;padding:0;margin:.75rem 0}
+ul li{position:relative;padding-left:1.4rem;margin-bottom:.6rem;font-size:.9rem;color:var(--text-dim);line-height:1.6;font-weight:300}
+ul li::before{content:'';position:absolute;left:0;top:.55rem;width:6px;height:6px;border-radius:50%;background:var(--sage)}
+ul.gold li::before{background:var(--gold)}
+ul.lav li::before{background:var(--lavender)}
 /* Timeline */
-.timeline{text-align:left;max-width:600px;margin-top:.5rem}
-.timeline .phase{padding:.6rem 0 .6rem 1.5rem;border-left:2px solid var(--sage);position:relative}
-.timeline .phase::before{content:'';position:absolute;left:-5px;top:.85rem;width:8px;height:8px;border-radius:50%;background:var(--sage)}
-.timeline .phase:nth-child(2)::before{background:var(--gold)}
-.timeline .phase:nth-child(3)::before{background:var(--lavender)}
-.timeline .phase:nth-child(4)::before{background:var(--gold)}
-.timeline .phase h3{font-size:1rem;margin-bottom:.2rem}
-.timeline .phase p{font-size:.88rem}
-
-.note{font-style:italic;color:var(--sage);margin-top:1rem;font-size:.92rem}
-
+.timeline{margin-top:1rem}
+.tl-item{display:flex;gap:1rem;margin-bottom:1rem;align-items:flex-start}
+.tl-marker{flex-shrink:0;width:3rem;height:3rem;border-radius:50%;background:var(--sage-dim);display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-weight:700;font-size:.85rem;color:var(--sage)}
+.tl-marker.g{background:var(--gold-dim);color:var(--gold)}
+.tl-marker.l{background:var(--lavender-dim);color:var(--lavender)}
+.tl-content h3{font-size:.95rem;margin-bottom:.2rem}
+.tl-content p{font-size:.85rem;margin:0}
+/* Tiers */
+.tiers{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-top:1.25rem}
+.tier{border:1px solid #e0dcd6;border-radius:10px;padding:1.5rem;position:relative;overflow:hidden}
+.tier.featured{border-color:var(--sage);background:var(--sage-dim)}
+.tier .tier-label{font-size:.65rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem}
+.tier h3{margin-bottom:.6rem}
+.tier ul li{font-size:.82rem;margin-bottom:.4rem}
+/* CTA */
+.cta{text-align:center;margin-top:1.5rem}
+.cta a{display:inline-block;padding:.75rem 2rem;background:var(--sage);color:#fff;text-decoration:none;border-radius:6px;font-weight:500;font-size:.9rem;transition:background .2s}
+.cta a:hover{background:#7a9a76}
 /* Nav dots */
-#dots{position:fixed;bottom:1.2rem;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:100}
-#dots span{width:10px;height:10px;border-radius:50%;background:#d4d0cb;cursor:pointer;transition:all .3s}
-#dots span.active{background:var(--sage);transform:scale(1.25)}
-
-@media(max-width:600px){
-  .slide{padding:1.5rem 1.2rem}
-  .pillars,.tiers{flex-direction:column;align-items:center}
-  .pillar,.tier{max-width:100%;min-width:0}
+.nav-dots{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);display:flex;gap:.5rem;z-index:50}
+.dot{width:8px;height:8px;border-radius:50%;background:#d4d0ca;cursor:pointer;transition:all .3s}
+.dot.active{background:var(--sage);width:24px;border-radius:4px}
+/* Callout */
+.callout{background:var(--bg-alt);border-radius:8px;padding:1.25rem 1.5rem;margin:.75rem 0;border-left:3px solid var(--gold)}
+.callout p{margin:0;font-style:italic;font-size:.9rem}
+@media(max-width:768px){
+  .slide{padding:1.5rem 1.25rem}
+  .cards{grid-template-columns:1fr}
+  .tiers{grid-template-columns:1fr}
+  .tl-item{gap:.75rem}
+  h1{font-size:1.8rem}h2{font-size:1.4rem}
+}
+@media(max-width:480px){
+  .slide{padding:1.25rem 1rem}
+  .card{padding:1rem}
 }
 </style>
 </head>
 <body>
 
-<div id="progress"></div>
+<div class="progress" id="progress"></div>
+
 <div class="deck" id="deck">
 
-<!-- Slide 1 -->
-<div class="slide active">
-  <h1 class="fade">Growing the Forgiveness Project</h1>
-  <div class="divider fade"></div>
-  <p class="subtitle fade">A digital strategy proposal for Luca Oake</p>
-  <p class="from fade">from <a href="https://hireloki.com">HireLoki</a></p>
+<!-- Slide 1: Title -->
+<div class="slide active" data-slide="0">
+<div class="slide-inner title-slide">
+  <span class="label">A Proposal</span>
+  <h1>Growing the <span class="accent">Forgiveness</span> Project</h1>
+  <p class="subtitle">A digital strategy proposal for Luca Oake</p>
+  <p class="from">Prepared by HireLoki &mdash; hireloki.com</p>
+</div>
 </div>
 
-<!-- Slide 2 -->
-<div class="slide">
-  <h2 class="fade">We Get It</h2>
-  <div class="divider fade"></div>
-  <p class="fade">Forgiveness is intangible, hard to market, harder to scale. You're a solopreneur wearing every hat. You need a partner who thinks strategically AND executes.</p>
-  <p class="fade" style="margin-top:.8rem;color:var(--gold);font-weight:500">That's what we do — AI-powered agency for one.</p>
+<!-- Slide 2: We Get It -->
+<div class="slide" data-slide="1">
+<div class="slide-inner">
+  <span class="label">Understanding</span>
+  <h2>We get it</h2>
+  <p>Forgiveness is one of the hardest things to market. It's intangible. It's emotional. It requires people to confront something they'd rather avoid. Making it resonate at scale takes more than a content calendar &mdash; it takes a real strategy.</p>
+  <p>You're a solopreneur wearing every hat: author, content creator, community builder, marketer. You don't need another tool. You need a <span class="highlight">thinking partner who also executes</span>.</p>
+  <p>That's what Loki is. An AI-powered agency built for one person &mdash; strategic when you need direction, operational when you need output.</p>
+</div>
 </div>
 
-<!-- Slide 3 -->
-<div class="slide">
-  <h2 class="fade">Where You Are</h2>
-  <div class="divider fade"></div>
-  <ul class="fade">
-    <li>Book nearly published (great foundation)</li>
-    <li>Ghost site with content but no traffic</li>
-    <li>Instagram planned but not launched</li>
-    <li>One LinkedIn post = entire marketing history</li>
-    <li>Tons of potential, zero bandwidth to activate it</li>
+<!-- Slide 3: Where You Are -->
+<div class="slide" data-slide="2">
+<div class="slide-inner">
+  <span class="label">Current State</span>
+  <h2>Where you are now</h2>
+  <ul>
+    <li>Book nearly published &mdash; a strong foundation most creators would kill for</li>
+    <li>Ghost site with real content, but no traffic and no promotion</li>
+    <li>Invite-only Instagram planned but not yet launched</li>
+    <li>One LinkedIn post = your entire marketing history to date</li>
+    <li>Massive potential sitting dormant &mdash; zero bandwidth to activate it</li>
   </ul>
+  <div class="callout">
+    <p>You have the substance. What's missing is the system to get it in front of the right people, consistently, without burning you out.</p>
+  </div>
+</div>
 </div>
 
-<!-- Slide 4 -->
-<div class="slide">
-  <h2 class="fade">The Vision</h2>
-  <div class="divider fade"></div>
-  <ul class="fade">
-    <li>Forgiveness as a recognized wellness practice (like meditation was 10 years ago)</li>
-    <li>Luca positioned as THE voice</li>
-    <li>10K+ engaged Instagram followers</li>
-    <li>Speaking invitations and thought leadership</li>
-    <li>Book as entry point to a full ecosystem</li>
-  </ul>
+<!-- Slide 4: The Vision -->
+<div class="slide" data-slide="3">
+<div class="slide-inner">
+  <span class="label">Where We're Going</span>
+  <h2>The vision</h2>
+  <p>Forgiveness positioned as a recognized wellness practice &mdash; the way meditation went from fringe to mainstream over the past decade. Luca Oake as the defining voice.</p>
+  <div class="cards">
+    <div class="card"><h3>10K+ Followers</h3><p>An engaged Instagram community willing to pay for access</p></div>
+    <div class="card gold"><h3>Speaking Circuit</h3><p>Invitations to conferences, podcasts, and panels on wellness</p></div>
+    <div class="card lav"><h3>Full Ecosystem</h3><p>Book, community, content, and chatbot working together</p></div>
+  </div>
+</div>
 </div>
 
-<!-- Slide 5 -->
-<div class="slide">
-  <h2 class="fade">Three Pillars</h2>
-  <div class="divider fade"></div>
-  <div class="pillars fade">
-    <div class="pillar">
-      <h3>Platform</h3>
-      <p>Build the digital home. Website, social, tools — all working together.</p>
+<!-- Slide 5: Three Pillars -->
+<div class="slide" data-slide="4">
+<div class="slide-inner">
+  <span class="label">Strategy</span>
+  <h2>Three pillars</h2>
+  <p>Everything we do ladders up to one of these three pillars. No scattered tactics &mdash; a coherent system.</p>
+  <div class="cards">
+    <div class="card">
+      <h3>1. Platform</h3>
+      <p>Build the digital home. Ghost site, Instagram, LinkedIn &mdash; each with a clear role.</p>
     </div>
-    <div class="pillar">
-      <h3>Content</h3>
-      <p>Consistent, quality content across every channel. Derived from your voice.</p>
+    <div class="card gold">
+      <h3>2. Content</h3>
+      <p>Consistent, high-quality content across every channel. We create it. You approve it.</p>
     </div>
-    <div class="pillar">
-      <h3>Growth</h3>
-      <p>Audience building, collaborations, speaking opportunities.</p>
+    <div class="card lav">
+      <h3>3. Growth</h3>
+      <p>Strategic audience building. Influencer collabs. Speaking pipeline. SEO. Email list.</p>
     </div>
   </div>
 </div>
-
-<!-- Slide 6 -->
-<div class="slide">
-  <h2 class="fade">Platform</h2>
-  <div class="divider fade"></div>
-  <ul class="fade">
-    <li><strong>Ghost site redesign:</strong> clean signup for invite-only Instagram, book promo, content hub</li>
-    <li><strong>Instagram launch:</strong> invite-only ($25), curated exclusive content</li>
-    <li><strong>LinkedIn:</strong> professional forgiveness content</li>
-    <li><strong>Book-powered chatbot:</strong> let people "talk to the book"</li>
-  </ul>
 </div>
 
-<!-- Slide 7 -->
-<div class="slide">
-  <h2 class="fade">Content Engine</h2>
-  <div class="divider fade"></div>
-  <ul class="fade">
-    <li><strong>Ghost:</strong> ungated articles for SEO and reference library</li>
-    <li><strong>Instagram:</strong> exclusive content driving $25 signups</li>
-    <li><strong>LinkedIn:</strong> thought leadership for professional audiences</li>
-    <li>Weekly calendar across all channels</li>
-    <li>All derived from book + Luca's voice</li>
-    <li><strong>We create, you approve</strong></li>
+<!-- Slide 6: Platform -->
+<div class="slide" data-slide="5">
+<div class="slide-inner">
+  <span class="label">Pillar One</span>
+  <h2>Platform</h2>
+  <ul>
+    <li><strong>Ghost site redesign</strong> &mdash; Clean signup flow for invite-only Instagram, book promotion, and a content hub that actually drives traffic</li>
+    <li><strong>Instagram launch</strong> &mdash; Invite-only model ($25 entry), curated feed with exclusive content not available anywhere else</li>
+    <li><strong>LinkedIn presence</strong> &mdash; Professional forgiveness content for the audience that takes wellness seriously</li>
+    <li><strong>"Ask the Book" chatbot</strong> &mdash; AI-powered tool that lets visitors explore forgiveness concepts conversationally, powered by the book itself</li>
   </ul>
-</div>
-
-<!-- Slide 8 -->
-<div class="slide">
-  <h2 class="fade">Growth</h2>
-  <div class="divider fade"></div>
-  <ul class="fade">
-    <li>Influencer collaborations + cross-promo</li>
-    <li>Speaking opportunity research and outreach</li>
-    <li>SEO for Ghost site</li>
-    <li>Book launch amplification</li>
-    <li>Email list building from site visitors</li>
-  </ul>
-</div>
-
-<!-- Slide 9 -->
-<div class="slide">
-  <h2 class="fade">The Book as Engine</h2>
-  <div class="divider fade"></div>
-  <ul class="fade">
-    <li><strong>RAG-powered chatbot:</strong> "Ask the Book" — interactive Q&A from the text</li>
-    <li>Mine 50+ social posts, 20+ articles, 10+ LinkedIn pieces from content</li>
-    <li>Audiobook clips for reels and stories</li>
-  </ul>
-  <p class="note fade">One asset, infinite content.</p>
-</div>
-
-<!-- Slide 10 -->
-<div class="slide">
-  <h2 class="fade">Month by Month</h2>
-  <div class="divider fade"></div>
-  <div class="timeline fade">
-    <div class="phase">
-      <h3>Month 1</h3>
-      <p>Ghost refresh, Instagram setup, content calendar, book launch</p>
-    </div>
-    <div class="phase">
-      <h3>Months 2 - 3</h3>
-      <p>Content engine running, growth begins, LinkedIn cadence</p>
-    </div>
-    <div class="phase">
-      <h3>Months 4 - 6</h3>
-      <p>Influencer collabs, speaking pitches, community building</p>
-    </div>
-    <div class="phase">
-      <h3>Ongoing</h3>
-      <p>Weekly content, platform management, strategy refinement</p>
-    </div>
+  <div class="callout">
+    <p>Each platform has a distinct job. Ghost attracts. Instagram converts. LinkedIn positions. The chatbot engages. No redundancy.</p>
   </div>
 </div>
+</div>
 
-<!-- Slide 11 -->
-<div class="slide">
-  <h2 class="fade">Investment</h2>
-  <div class="divider fade"></div>
-  <div class="tiers fade">
+<!-- Slide 7: Content -->
+<div class="slide" data-slide="6">
+<div class="slide-inner">
+  <span class="label">Pillar Two</span>
+  <h2>Content engine</h2>
+  <p>A weekly content calendar across all three channels, derived entirely from Luca's voice and the book. Nothing generic. Nothing that reads like a template.</p>
+  <ul class="gold">
+    <li><strong>Ghost</strong> &mdash; Ungated articles optimized for search. The reference library. What people find when they Google forgiveness practices.</li>
+    <li><strong>Instagram</strong> &mdash; Exclusive content that justifies the $25 entry. Behind-the-scenes, deep dives, community Q&amp;A.</li>
+    <li><strong>LinkedIn</strong> &mdash; Thought leadership posts. The professional case for forgiveness in workplaces, relationships, leadership.</li>
+  </ul>
+  <p>We create the drafts. You review and approve. Minimal time investment on your end &mdash; maximum consistency for your audience.</p>
+</div>
+</div>
+
+<!-- Slide 8: Growth -->
+<div class="slide" data-slide="7">
+<div class="slide-inner">
+  <span class="label">Pillar Three</span>
+  <h2>Growth</h2>
+  <ul class="lav">
+    <li><strong>Influencer collaborations</strong> &mdash; Identify and pitch wellness creators for cross-promotion and guest content</li>
+    <li><strong>Speaking opportunities</strong> &mdash; Research conferences, podcasts, and panels. Draft pitches. Manage outreach.</li>
+    <li><strong>SEO for Ghost</strong> &mdash; Target high-intent keywords around forgiveness, healing, and wellness practices</li>
+    <li><strong>Book launch amplification</strong> &mdash; Coordinated push across all channels when the book drops</li>
+    <li><strong>Email list building</strong> &mdash; Capture Ghost site visitors for ongoing nurture and announcements</li>
+  </ul>
+</div>
+</div>
+
+<!-- Slide 9: Book as Engine -->
+<div class="slide" data-slide="8">
+<div class="slide-inner">
+  <span class="label">The Multiplier</span>
+  <h2>The book as engine</h2>
+  <p>Your book isn't just a product &mdash; it's a content engine. One well-written manuscript becomes:</p>
+  <div class="cards">
+    <div class="card"><h3>50+ Social Posts</h3><p>Key quotes, insights, and micro-lessons extracted and formatted for Instagram and LinkedIn</p></div>
+    <div class="card gold"><h3>20+ Articles</h3><p>Deep-dive pieces for Ghost, each expanding on a concept from the book</p></div>
+    <div class="card lav"><h3>"Ask the Book"</h3><p>RAG-powered chatbot that lets visitors explore forgiveness concepts in conversation</p></div>
+  </div>
+  <p style="margin-top:1rem;">Plus audiobook clips for Instagram reels, pull quotes for graphics, and workshop outlines for speaking engagements. One asset, infinite leverage.</p>
+</div>
+</div>
+
+<!-- Slide 10: Timeline -->
+<div class="slide" data-slide="9">
+<div class="slide-inner">
+  <span class="label">Roadmap</span>
+  <h2>Month by month</h2>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-marker">1</div><div class="tl-content"><h3>Foundation</h3><p>Ghost site refresh, Instagram setup, content calendar, book launch coordination</p></div></div>
+    <div class="tl-item"><div class="tl-marker g">2-3</div><div class="tl-content"><h3>Engine Running</h3><p>Content publishing cadence live, Instagram growth begins, LinkedIn posting starts</p></div></div>
+    <div class="tl-item"><div class="tl-marker l">4-6</div><div class="tl-content"><h3>Scale</h3><p>Influencer collaborations, speaking pitch outreach, community building, chatbot launch</p></div></div>
+    <div class="tl-item"><div class="tl-marker">7+</div><div class="tl-content"><h3>Ongoing</h3><p>Weekly content creation, platform management, strategy adjustments, growth optimization</p></div></div>
+  </div>
+</div>
+</div>
+
+<!-- Slide 11: Investment -->
+<div class="slide" data-slide="10">
+<div class="slide-inner">
+  <span class="label">Investment</span>
+  <h2>Two paths forward</h2>
+  <div class="tiers">
     <div class="tier">
+      <div class="tier-label">Essential</div>
       <h3>Content &amp; Management</h3>
       <ul>
-        <li>Content creation across channels</li>
-        <li>Posting and scheduling</li>
-        <li>Platform management</li>
+        <li>Weekly content creation across all channels</li>
+        <li>Ghost site management and updates</li>
+        <li>Instagram posting and community management</li>
+        <li>LinkedIn content scheduling</li>
+        <li>Monthly performance review</li>
       </ul>
     </div>
     <div class="tier featured">
-      <h3 style="color:var(--gold)">Full Strategy</h3>
+      <div class="tier-label">Recommended</div>
+      <h3>Full Strategy</h3>
       <ul>
-        <li>Everything in Content &amp; Management</li>
+        <li>Everything in Essential</li>
         <li>Growth strategy and execution</li>
-        <li>Speaking outreach</li>
-        <li>Book-powered chatbot build</li>
+        <li>Speaking opportunity outreach</li>
+        <li>Influencer collaboration management</li>
+        <li>"Ask the Book" chatbot build</li>
+        <li>SEO and email list strategy</li>
       </ul>
     </div>
   </div>
-  <p class="note fade">Fraction of traditional agency cost. AI-powered efficiency. Human strategic thinking.</p>
+  <p style="margin-top:1.25rem;text-align:center;font-size:.85rem;">A fraction of traditional agency cost. AI-powered efficiency. Human strategic thinking.</p>
+</div>
 </div>
 
-<!-- Slide 12 -->
-<div class="slide">
-  <h2 class="fade">Next Steps</h2>
-  <div class="divider fade"></div>
-  <ul class="fade">
-    <li>Finish book publication</li>
-    <li>Reconnect to finalize scope</li>
-    <li>Quick wins we can start immediately</li>
-  </ul>
-  <p class="fade" style="margin-top:1.5rem;font-weight:500;color:var(--gold)">mike@mamv.co &nbsp;|&nbsp; <a href="https://hireloki.com" style="color:var(--gold)">hireloki.com</a></p>
+<!-- Slide 12: Next Steps -->
+<div class="slide" data-slide="11">
+<div class="slide-inner title-slide">
+  <span class="label">What's Next</span>
+  <h2>Let's make this real</h2>
+  <div style="text-align:left;max-width:500px;margin:1.5rem auto 0;">
+    <ul>
+      <li>Finish book publication &mdash; that's the foundation everything builds on</li>
+      <li>Reconnect to finalize scope and timeline</li>
+      <li>Identify quick wins we can start immediately</li>
+    </ul>
+  </div>
+  <div class="cta">
+    <a href="mailto:mike@mamv.co">mike@mamv.co</a>
+  </div>
+  <p style="margin-top:1.5rem;" class="from">hireloki.com</p>
+</div>
 </div>
 
-</div>
+</div><!-- /deck -->
 
-<div id="dots"></div>
+<div class="nav-dots" id="dots"></div>
 
 <script>
-(function(){
-  const slides=document.querySelectorAll('.slide');
-  const dotsC=document.getElementById('dots');
-  const prog=document.getElementById('progress');
-  let cur=0,startX=0;
-  const n=slides.length;
+const slides=document.querySelectorAll('.slide'),
+      dots=document.getElementById('dots'),
+      progress=document.getElementById('progress');
+let cur=0,total=slides.length,touching=false,touchX=0;
 
-  // build dots
-  for(let i=0;i<n;i++){
-    const d=document.createElement('span');
-    if(i===0)d.classList.add('active');
-    d.addEventListener('click',()=>go(i));
-    dotsC.appendChild(d);
+function init(){
+  for(let i=0;i<total;i++){
+    const d=document.createElement('div');
+    d.className='dot'+(i===0?' active':'');
+    d.onclick=()=>go(i);
+    dots.appendChild(d);
   }
-  const dots=dotsC.querySelectorAll('span');
+  updateProgress();
+}
 
-  function go(i){
-    if(i<0||i>=n)return;
-    slides[cur].classList.remove('active');
-    dots[cur].classList.remove('active');
-    cur=i;
-    slides[cur].classList.add('active');
-    dots[cur].classList.add('active');
-    prog.style.width=((cur/(n-1))*100)+'%';
-  }
+function go(n){
+  if(n<0||n>=total)return;
+  slides[cur].classList.remove('active');
+  dots.children[cur].classList.remove('active');
+  cur=n;
+  slides[cur].classList.add('active');
+  dots.children[cur].classList.add('active');
+  updateProgress();
+}
 
-  document.addEventListener('keydown',e=>{
-    if(e.key==='ArrowRight'||e.key==='ArrowDown')go(cur+1);
-    if(e.key==='ArrowLeft'||e.key==='ArrowUp')go(cur-1);
-  });
+function updateProgress(){
+  progress.style.width=((cur+1)/total*100)+'%';
+}
 
-  // touch swipe
-  document.addEventListener('touchstart',e=>{startX=e.touches[0].clientX},{passive:true});
-  document.addEventListener('touchend',e=>{
-    const dx=e.changedTouches[0].clientX-startX;
-    if(Math.abs(dx)>50){dx<0?go(cur+1):go(cur-1)}
-  },{passive:true});
-})();
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' ')go(cur+1);
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp')go(cur-1);
+});
+
+document.addEventListener('touchstart',e=>{touching=true;touchX=e.touches[0].clientX},{passive:true});
+document.addEventListener('touchend',e=>{
+  if(!touching)return;
+  touching=false;
+  const diff=e.changedTouches[0].clientX-touchX;
+  if(Math.abs(diff)>50){diff<0?go(cur+1):go(cur-1)}
+},{passive:true});
+
+init();
 </script>
 </body>
 </html>
