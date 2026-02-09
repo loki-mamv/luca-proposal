@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Growing the Forgiveness Project</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #FDFAF6;
+  --bg-warm: #F7F2EB;
+  --bg-card: rgba(120,107,82,0.05);
+  --bg-card-hover: rgba(120,107,82,0.09);
+  --sage: #7D8E7B;
+  --sage-deep: #5B6E59;
+  --sage-light: #A8B5A6;
+  --gold: #C4A265;
+  --gold-light: #D4BC8A;
+  --lavender: #9B8FB4;
+  --lavender-light: #C4BBD6;
+  --text: #2C2C2C;
+  --text-secondary: #5A5A5A;
+  --text-muted: #8A8A8A;
+  --border: rgba(120,107,82,0.12);
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'Inter', -apple-system, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+#progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--sage), var(--gold), var(--lavender));
+  z-index: 1000;
+  transition: width 0.3s ease;
+  width: 0%;
+}
+
+#nav {
+  position: fixed;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 999;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(120,107,82,0.2);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  padding: 0;
+}
+
+.dot:hover, .dot.active {
+  background: var(--sage);
+  transform: scale(1.4);
+  box-shadow: 0 0 10px rgba(125,142,123,0.3);
+}
+
+.dot::after {
+  content: attr(data-title);
+  position: absolute;
+  right: calc(100% + 14px);
+  top: 50%;
+  transform: translateY(-50%);
+  background: #3A3A3A;
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 400;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.dot:hover::after { opacity: 1; }
+
+.slide {
+  min-height: 100vh;
+  min-height: 100dvh;
+  scroll-snap-align: start;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.slide:nth-child(even) {
+  background: var(--bg-warm);
+}
+
+.inner {
+  max-width: 880px;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  line-height: 1.2;
+}
+
+.slide-title {
+  font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+  font-weight: 500;
+  margin-bottom: 14px;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+.slide-sub {
+  font-size: clamp(0.95rem, 1.3vw, 1.05rem);
+  color: var(--text-secondary);
+  margin-bottom: 36px;
+  max-width: 600px;
+  font-weight: 300;
+  line-height: 1.7;
+}
+
+.accent { color: var(--sage-deep); }
+.gold { color: var(--gold); }
+.lav { color: var(--lavender); }
+
+.line {
+  width: 36px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--sage), var(--gold));
+  border-radius: 1px;
+  margin-bottom: 18px;
+}
+
+/* Reveal animations */
+.r {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.r.v { opacity: 1; transform: translateY(0); }
+.r1 { transition-delay: 0.1s; }
+.r2 { transition-delay: 0.2s; }
+.r3 { transition-delay: 0.3s; }
+.r4 { transition-delay: 0.4s; }
+.r5 { transition-delay: 0.5s; }
+.r6 { transition-delay: 0.6s; }
+.r7 { transition-delay: 0.7s; }
+
+/* Cards */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-top: 4px;
+}
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 24px 22px;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.card:hover {
+  background: var(--bg-card-hover);
+  border-color: rgba(120,107,82,0.2);
+}
+
+.card h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--sage-deep);
+}
+
+.card p {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Feature list */
+.feature-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.feature-list li {
+  font-size: 0.98rem;
+  color: var(--text-secondary);
+  padding-left: 22px;
+  position: relative;
+  line-height: 1.6;
+}
+
+.feature-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 9px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--sage);
+  opacity: 0.6;
+}
+
+.feature-list li strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* Pillars */
+.pillars {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 4px;
+}
+
+.pillar {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 28px 22px;
+  text-align: center;
+  transition: background 0.3s ease;
+}
+
+.pillar:hover { background: var(--bg-card-hover); }
+
+.pillar-num {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-weight: 300;
+  color: var(--sage-light);
+  margin-bottom: 8px;
+  line-height: 1;
+}
+
+.pillar h4 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text);
+}
+
+.pillar p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+/* Timeline */
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+  padding-left: 28px;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 6px;
+  bottom: 6px;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--sage), var(--gold), var(--lavender));
+}
+
+.tl-item {
+  position: relative;
+  padding-bottom: 24px;
+}
+
+.tl-item::before {
+  content: '';
+  position: absolute;
+  left: -24px;
+  top: 6px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--sage);
+  border: 2px solid var(--bg);
+}
+
+.slide:nth-child(even) .tl-item::before {
+  border-color: var(--bg-warm);
+}
+
+.tl-item:nth-child(2)::before { background: var(--gold); }
+.tl-item:nth-child(3)::before { background: var(--lavender); }
+.tl-item:nth-child(4)::before { background: var(--sage-deep); }
+
+.tl-item h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--text);
+}
+
+.tl-item p {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+/* Tiers */
+.tiers {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 4px;
+}
+
+.tier {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 28px 24px;
+  transition: background 0.3s ease;
+}
+
+.tier:hover { background: var(--bg-card-hover); }
+
+.tier-label {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--sage);
+  margin-bottom: 6px;
+}
+
+.tier h4 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+
+.tier ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tier li {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  padding-left: 16px;
+  position: relative;
+  line-height: 1.5;
+}
+
+.tier li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 7px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--sage-light);
+}
+
+/* Callout */
+.callout {
+  margin-top: 24px;
+  padding: 14px 18px;
+  background: rgba(125,142,123,0.06);
+  border-left: 2px solid var(--sage);
+  border-radius: 0 8px 8px 0;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+/* Hero */
+.hero-eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--sage);
+  margin-bottom: 20px;
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 5.5vw, 4rem);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 18px;
+  color: var(--text);
+}
+
+.hero-sub {
+  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  color: var(--text-secondary);
+  font-weight: 300;
+  margin-bottom: 48px;
+  max-width: 520px;
+  line-height: 1.7;
+}
+
+.hero-from {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  letter-spacing: 0.03em;
+}
+
+.hero-from a {
+  color: var(--sage);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(125,142,123,0.3);
+  transition: border-color 0.2s;
+}
+
+.hero-from a:hover { border-color: var(--sage); }
+
+/* CTA */
+.cta-block { text-align: center; }
+.cta-block .hero-title { margin-bottom: 14px; }
+
+.cta-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 36px;
+  font-family: var(--font-body);
+  font-size: 1rem;
+}
+
+.cta-contact a {
+  color: var(--sage-deep);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(91,110,89,0.3);
+  transition: border-color 0.2s;
+}
+
+.cta-contact a:hover { border-color: var(--sage-deep); }
+
+.cta-note {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 24px;
+  font-weight: 300;
+}
+
+/* Steps list */
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.step {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+}
+
+.step-num {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: var(--sage-light);
+  min-width: 32px;
+  line-height: 1;
+  padding-top: 2px;
+}
+
+.step-text h4 {
+  font-size: 0.95rem;
+  margin-bottom: 3px;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-weight: 600;
+}
+
+.step-text p {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+/* Soft orbs for warmth */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.12;
+  pointer-events: none;
+}
+
+.orb-sage {
+  width: 350px; height: 350px;
+  background: var(--sage);
+}
+
+.orb-gold {
+  width: 300px; height: 300px;
+  background: var(--gold);
+}
+
+.orb-lav {
+  width: 280px; height: 280px;
+  background: var(--lavender);
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .slide { padding: 40px 28px; }
+  .cards, .tiers { grid-template-columns: 1fr; }
+  .pillars { grid-template-columns: 1fr; gap: 12px; }
+  #nav { right: 10px; gap: 8px; }
+  .dot { width: 6px; height: 6px; }
+  .dot::after { display: none; }
+  .orb { opacity: 0.06; }
+  .pillar { padding: 22px 18px; }
+}
+
+@media (max-width: 480px) {
+  .slide { padding: 32px 20px; }
+  .hero-title { font-size: 2.2rem; }
+  .slide-title { font-size: 1.5rem; }
+  .feature-list li { font-size: 0.9rem; }
+  .card { padding: 18px 16px; }
+  .card p, .tier li, .tl-item p { font-size: 0.82rem; }
+  .pillar-num { font-size: 1.8rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .r { opacity: 1; transform: none; transition: none; }
+  html { scroll-behavior: auto; }
+}
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+<nav id="nav"></nav>
+
+<!-- Slide 1: Title -->
+<section class="slide" data-title="Introduction">
+  <div class="orb orb-sage" style="top:-80px;right:-60px;"></div>
+  <div class="orb orb-gold" style="bottom:-60px;left:-80px;"></div>
+  <div class="inner">
+    <div class="r"><p class="hero-eyebrow">A proposal from HireLoki</p></div>
+    <div class="r r1">
+      <h1 class="hero-title">Growing the<br><span class="accent">Forgiveness Project</span></h1>
+    </div>
+    <div class="r r2">
+      <p class="hero-sub">A digital strategy proposal for Luca Oake &mdash; turning a powerful idea into a movement people can find, follow, and join.</p>
+    </div>
+    <div class="r r3">
+      <p class="hero-from">Prepared by <a href="https://hireloki.com">hireloki.com</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 2: We Get It -->
+<section class="slide" data-title="We Get It">
+  <div class="orb orb-lav" style="top:30%;right:-100px;"></div>
+  <div class="inner">
+    <div class="r"><div class="line"></div></div>
+    <div class="r r1"><h2 class="slide-title">We Get It</h2></div>
+    <div class="r r2"><p class="slide-sub">Forgiveness isn't a product you can photograph. It's an intangible concept &mdash; hard to market, harder to scale.</p></div>
+    <ul class="feature-list">
+      <li class="r r2">You're a solopreneur wearing every hat &mdash; author, marketer, community builder, strategist</li>
+      <li class="r r3">You need a partner who thinks strategically <em>and</em> executes &mdash; not just advice, but actual output</li>
+      <li class="r r4">That's exactly what Loki does: an AI-powered agency built for one person</li>
+      <li class="r r5">We handle the digital work so you can focus on the work that matters &mdash; the book, the message, the mission</li>
+    </ul>
+  </div>
+</section>
+
+<!-- Slide 3: Where You Are Now -->
+<section class="slide" data-title="Where You Are">
+  <div class="orb orb-gold" style="bottom:-60px;right:-80px;"></div>
+  <div class="inner">
+    <div class="r"><div class="line"></div></div>
+    <div class="r r1"><h2 class="slide-title">Where You Are <span class="accent">Now</span></h2></div>
+    <div class="r r2"><p class="slide-sub">A strong foundation &mdash; with a lot of room to build on it.</p></div>
+    <ul class="feature-list">
+      <li class="r r2"><strong>Book nearly published</strong> &mdash; ebook live on Amazon, audiobook and paperback distributing soon. This is your cornerstone.</li>
+      <li class="r r3"><strong>Ghost site with articles</strong> &mdash; good content sitting there, but no traffic, no promotion, no discovery path</li>
+      <li class="r r4"><strong>Instagram planned but not launched</strong> &mdash; invite-only model is smart, but needs infrastructure to support it</li>
+      <li class="r r5"><strong>One LinkedIn post</strong> &mdash; currently the entire marketing history of the Forgiveness Project</li>
+      <li class="r r6"><strong>Tons of potential, zero bandwidth</strong> &mdash; the ideas are there, the execution capacity isn't. Yet.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- Slide 4: The Vision -->
+<section class="slide" data-title="The Vision">
+  <div class="orb orb-sage" style="top:-60px;left:-80px;"></div>
+  <div class="orb orb-lav" style="bottom:-40px;right:-60px;"></div>
+  <div class="inner">
+    <div class="r"><div class="line"></div></div>
+    <div class="r r1"><h2 class="slide-title">The <span class="accent">Vision</span></h2></div>
+    <div class="r r2"><p class="slide-sub">Forgiveness as a recognized wellness practice &mdash; the way meditation was ten years ago. And Luca as the voice leading that shift.</p></div>
+    <div class="cards">
+      <div class="card r r2">
+        <h4>The Voice of Forgiveness</h4>
+        <p>Luca positioned as the go-to authority &mdash; the person media, podcasts, and conferences call when forgiveness enters the conversation.</p>
+      </div>
+      <div class="card r r3">
+        <h4>Engaged Community</h4>
+        <p>10,000+ followers who don't just scroll past &mdash; they read, share, comment, and show up. Quality over vanity metrics.</p>
+      </div>
+      <div class="card r r4">
+        <h4>Thought Leadership</h4>
+        <p>Speaking invitations, guest columns, podcast features. The kind of credibility that compounds over years.</p>
+      </div>
+      <div class="card r r5">
+        <h4>A Full Ecosystem</h4>
+        <p>The book as entry point to articles, exclusive content, a chatbot, live events &mdash; a world built around forgiveness as practice.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 5: Three Pillars -->
+<section class="slide" data-title="Strategy">
+  <div class="orb orb-gold" style="top:50%;left:-80px;transform:translateY(-50%);"></div>
+  <div class="inner">
+    <div class="r"><div class="line"></div></div>
+    <div class="r r1"><h2 class="slide-title">Our Strategy &mdash; <span class="accent">Three Pillars</span></h2></div>
+    <div class="r r2"><p class="slide-sub">Everything we do falls into one of three categories. Each reinforces the others.</p></div>
+    <div class="pillars">
+      <div class="pillar r r3">
+        <div class="pillar-num">I</div>
+        <h4>Platform</h4>
+        <p>Build the digital home. Ghost site refresh, Instagram launch, LinkedIn presence &mdash; the places people find and follow Luca.</p>
+      </div>
+      <div class="pillar r r4">
+        <div class="pillar-num">II</div>
+        <h4>Content</h4>
+        <p>Consistent, high-quality content across every channel. We create it, Luca approves it. Minimal time investment, maximum output.</p>
+      </div>
+      <div class="pillar r r5">
+        <div class="pillar-num">III</div>
+        <h4>Growth</h4>
+        <p>Strategic audience building. Influencer collaborations, speaking opportunities, SEO &mdash; the work that compounds over time.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 6: Platform -->
+<section class="slide" data-title="Platform">
+  <div class="orb orb-sage" style="bottom:-80px;right:-60px;"></div>
+  <div class="inner">
+    <div class="r"><div class="line"></div></div>
+    <div class="r r1"><h2 class="slide-title">Pillar I &mdash; <span class="accent">Platform</span></h2></div>
+    <div class="r r2"><p class="slide-sub">Build the places where people discover, engage with, and commit to the Forgiveness Project.</p></div>
+    <div class="cards">
+      <div class="card r r2">
+        <h4>Ghost Site Redesign</h4>
+        <p>Clean signup flow for the invite-only Instagram, prominent book promotion, and a content hub that makes every article discoverable.</p>
+      </div>
+      <div class="card r r3">
+        <h4>Instagram Launch</h4>
+        <p>Invite-only model at $25 &mdash; curated feed with exclusive content. Scarcity drives perceived value and commitment.</p>
+      </div>
+      <div class="card r r4">
+        <h4>LinkedIn Presence</h4>
+        <p>Professional forgiveness content for serious audiences. The credibility channel &mdash; where speaking invitations originate.</p>
+      </div>
+      <div class="card r r5">
+        <h4>"Ask the Book" Chatbot</h4>
+        <p>RAG-powered AI that lets visitors explore forgiveness concepts conversationally. A genuine differentiator no one else in this space has.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 7: Content Engine -->
+<section class="slide" data-title="Content">
+  <div class="orb orb-lav" style="top:-60px;left:-60px;"></div>
+  <div class="inner">
+    <div class="r"><div class="line"></div></div>
+    <div class="r r1"><h2 class="slide-title">Pillar II &mdash; <span class="accent">Content Engine</span></h2></div>
+    <div class="r r2"><p class="slide-sub">A weekly rhythm across every channel &mdash; all derived from the book and Luca's voice, never generic.</p></div>
+    <ul class="feature-list">
+      <li class="r r2"><strong>Ghost articles</strong> &mdash; ungated, SEO-optimized, shareable. Your reference library and discovery engine.</li>
+      <li class="r r3"><strong>Instagram exclusives</strong> &mdash; content not available anywhere else. This is what justifies the $25 invite.</li>
+      <li class="r r4"><strong>LinkedIn posts</strong> &mdash; thought leadership for professional audiences. Positions Luca alongside the wellness and psychology conversation.</li>
+      <li class="r r5"><strong>Content calendar</strong> &mdash; weekly schedule across all channels, planned in advance, no scrambling.</li>
+      <li class="r r6"><strong>Your voice, always</strong> &mdash; everything sourced from the book and Luca's perspective. Loki creates drafts, Luca approves. 15 minutes a week, not 15 hours.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- Slide 8: Growth -->
+<section class="slide" data-title="Growth">
+  <div class="orb orb-gold" style="top:20%;right:-80px;"></div>
+  <div class="inner">
+    <div class="r"><div class="line"></div></div>
+    <div class="r r1"><h2 class="slide-title">Pillar III &mdash; <span class="accent">Growth</span></h2></div>
+    <div class="r r2"><p class="slide-sub">Content alone doesn't build audiences. Deliberate strategy does.</p></div>
+    <ul class="feature-list">
+      <li class="r r2"><strong>Influencer collaborations</strong> &mdash; identify wellness creators, propose partnerships, cross-pollinate audiences</li>
+      <li class="r r3"><strong>Speaking opportunity pipeline</strong> &mdash; research conferences, podcasts, and panels. Write pitches. Manage outreach.</li>
+      <li class="r r4"><strong>SEO strategy</strong> &mdash; forgiveness + wellness keywords targeted on Ghost. Organic traffic that compounds month over month.</li>
+      <li class="r r5"><strong>Book launch amplification</strong> &mdash; coordinated push across all channels when the paperback and audiobook go live</li>
+      <li class="r r6"><strong>Email list building</strong> &mdash; capture Ghost site visitors, nurture them, convert them to Instagram subscribers and book buyers</li>
+    </ul>
+  </div>
+</section>
+
+<!-- Slide 9: Book as Engine -->
+<section class="slide" data-title="The Book">
+  <div class="orb orb-sage" style="bottom:-60px;left:-60px;"></div>
+  <div class="orb orb-lav" style="top:-40px;right:-80px;"></div>
+  <div class="inner">
+    <div class="r"><div class="line"></div></div>
+    <div class="r r1"><h2 class="slide-title">The Book as <span class="accent">Engine</span></h2></div>
+    <div class="r r2"><p class="slide-sub">Your book isn't just a product &mdash; it's the raw material for everything else.</p></div>
+    <div class="cards">
+      <div class="card r r2">
+        <h4>"Ask the Book" Chatbot</h4>
+        <p>RAG-powered conversational tool. Visitors explore forgiveness concepts by asking questions and getting answers drawn directly from the text.</p>
+      </div>
+      <div class="card r r3">
+        <h4>Content Mining</h4>
+        <p>Extract 50+ social posts, 20+ articles, and 10+ LinkedIn pieces from the book's content. One asset becomes an entire content library.</p>
+      </div>
+      <div class="card r r4">
+        <h4>Audiobook Clips</h4>
+        <p>Short excerpts for Instagram reels and stories. Real audio from the real book &mdash; the most authentic content possible.</p>
+      </div>
+      <div class="card r r5">
+        <h4>SEO Foundation</h4>
+        <p>Every concept in the book maps to a search query someone is typing. Articles built from book content rank for forgiveness-related keywords.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 10: Timeline -->
+<section class="slide" data-title="Timeline">
+  <div class="orb orb-gold" style="top:40%;left:-60px;"></div>
+  <div class="inner">
+    <div class="r"><div class="line"></div></div>
+    <div class="r r1"><h2 class="slide-title">What This Looks Like <span class="accent">Month to Month</span></h2></div>
+    <div class="r r2"><p class="slide-sub">A phased approach &mdash; building infrastructure first, then scaling.</p></div>
+    <div class="timeline">
+      <div class="tl-item r r2">
+        <h4>Month 1 &mdash; Foundation</h4>
+        <p>Ghost site refresh, Instagram infrastructure and launch, content calendar creation, book launch coordination and support.</p>
+      </div>
+      <div class="tl-item r r3">
+        <h4>Months 2-3 &mdash; Momentum</h4>
+        <p>Content engine running at full cadence. Instagram growth strategy activates. LinkedIn posting begins. SEO work starts compounding.</p>
+      </div>
+      <div class="tl-item r r4">
+        <h4>Months 4-6 &mdash; Expansion</h4>
+        <p>Influencer collaborations launch. Speaking pitch outreach begins. Community starts forming around the Forgiveness Project brand.</p>
+      </div>
+      <div class="tl-item r r5">
+        <h4>Ongoing</h4>
+        <p>Weekly content creation, platform management, strategy adjustments based on what's working. Continuous improvement, not set-and-forget.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 11: Investment -->
+<section class="slide" data-title="Investment">
+  <div class="orb orb-lav" style="bottom:-60px;right:-60px;"></div>
+  <div class="inner">
+    <div class="r"><div class="line"></div></div>
+    <div class="r r1"><h2 class="slide-title"><span class="accent">Investment</span></h2></div>
+    <div class="r r2"><p class="slide-sub">Two flexible tiers, designed to grow with the project. A fraction of what agencies charge &mdash; with more strategic thinking, not less.</p></div>
+    <div class="tiers">
+      <div class="tier r r3">
+        <div class="tier-label">Tier 1</div>
+        <h4>Content + Management</h4>
+        <ul>
+          <li>Weekly content creation across all channels</li>
+          <li>Ghost, Instagram, and LinkedIn posting</li>
+          <li>Content calendar and editorial planning</li>
+          <li>Platform management and optimization</li>
+          <li>Monthly performance reporting</li>
+        </ul>
+      </div>
+      <div class="tier r r4">
+        <div class="tier-label">Tier 2</div>
+        <h4>Full Strategy</h4>
+        <ul>
+          <li>Everything in Tier 1</li>
+          <li>Growth strategy and audience building</li>
+          <li>Speaking opportunity research and outreach</li>
+          <li>Influencer collaboration management</li>
+          <li>"Ask the Book" chatbot build and maintenance</li>
+          <li>SEO strategy and execution</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout r r5">The book comes first. Let's scope the right engagement once it's published &mdash; no rush, no pressure. We can start with quick wins and expand from there.</div>
+  </div>
+</section>
+
+<!-- Slide 12: Next Steps -->
+<section class="slide" data-title="Next Steps">
+  <div class="orb orb-sage" style="top:40%;left:50%;transform:translate(-50%,-50%);width:450px;height:450px;opacity:0.08;"></div>
+  <div class="inner">
+    <div class="cta-block">
+      <div class="r"><h2 class="hero-title">Let's <span class="accent">Build This</span></h2></div>
+      <div class="r r1"><p class="slide-sub" style="margin:0 auto;text-align:center;max-width:480px;">Finish the book. We'll reconnect to scope and finalize. In the meantime, there are quick wins we can start on right away.</p></div>
+      <div class="cta-contact r r2">
+        <span><a href="mailto:mike@mamv.co">mike@mamv.co</a></span>
+        <span><a href="https://hireloki.com">hireloki.com</a></span>
+      </div>
+      <div class="r r3"><p class="cta-note">Loki &mdash; AI-powered agency for one</p></div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function() {
+  var slides = document.querySelectorAll('.slide');
+  var nav = document.getElementById('nav');
+  var progress = document.getElementById('progress');
+  var current = 0;
+  var isNav = false;
+
+  slides.forEach(function(s, i) {
+    var d = document.createElement('button');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.dataset.slide = i;
+    d.dataset.title = s.dataset.title || '';
+    d.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+    nav.appendChild(d);
+  });
+
+  var dots = document.querySelectorAll('.dot');
+
+  function goTo(idx, smooth) {
+    if (idx < 0 || idx >= slides.length || isNav) return;
+    isNav = true;
+    slides[idx].scrollIntoView({ behavior: smooth !== false ? 'smooth' : 'auto' });
+    current = idx;
+    updateUI();
+    setTimeout(function() { isNav = false; }, smooth !== false ? 600 : 100);
+  }
+
+  function updateUI() {
+    dots.forEach(function(d, i) { d.classList.toggle('active', i === current); });
+    progress.style.width = ((current + 1) / slides.length * 100) + '%';
+  }
+
+  var obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        e.target.querySelectorAll('.r').forEach(function(el) { el.classList.add('v'); });
+        if (!isNav) {
+          var idx = Array.from(slides).indexOf(e.target);
+          if (idx !== -1) { current = idx; updateUI(); }
+        }
+      }
+    });
+  }, { threshold: 0.3 });
+
+  slides.forEach(function(s) { obs.observe(s); });
+
+  dots.forEach(function(d) {
+    d.addEventListener('click', function() { goTo(parseInt(d.dataset.slide)); });
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ') {
+      e.preventDefault(); goTo(current + 1);
+    } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+      e.preventDefault(); goTo(current - 1);
+    }
+  });
+
+  var ty = 0;
+  document.addEventListener('touchstart', function(e) { ty = e.touches[0].clientY; }, { passive: true });
+  document.addEventListener('touchend', function(e) {
+    var d = ty - e.changedTouches[0].clientY;
+    if (Math.abs(d) > 50) goTo(current + (d > 0 ? 1 : -1));
+  }, { passive: true });
+
+  slides[0].querySelectorAll('.r').forEach(function(el) { el.classList.add('v'); });
+  updateUI();
+})();
+</script>
+
+</body>
+</html>
