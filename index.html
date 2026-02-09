@@ -1,971 +1,308 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Growing the Forgiveness Project — HireLoki</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --sage: #7a8c6e;
-            --sage-light: #a8b89e;
-            --sage-bg: #f0f3ec;
-            --gold: #c4a35a;
-            --gold-light: #e8d5a3;
-            --lavender: #b8a9c9;
-            --lavender-light: #ddd4e8;
-            --cream: #faf8f4;
-            --warm-white: #fefdfb;
-            --text-dark: #2c2c2c;
-            --text-mid: #5a5a5a;
-            --text-light: #8a8a8a;
-            --font-display: 'Cormorant Garamond', Georgia, serif;
-            --font-body: 'Inter', -apple-system, sans-serif;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        html {
-            scroll-snap-type: y mandatory;
-            scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        body {
-            font-family: var(--font-body);
-            color: var(--text-dark);
-            background: var(--cream);
-            overflow-x: hidden;
-        }
-
-        .slide {
-            min-height: 100vh;
-            scroll-snap-align: start;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 60px 100px;
-            position: relative;
-            opacity: 0;
-            transform: translateY(24px);
-            transition: opacity 0.7s ease, transform 0.7s ease;
-        }
-
-        .slide.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Progress bar */
-        .progress-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 2px;
-            background: linear-gradient(90deg, var(--sage), var(--gold));
-            width: 0%;
-            z-index: 200;
-            transition: width 0.3s ease;
-        }
-
-        /* Nav dots */
-        .nav-dots {
-            position: fixed;
-            right: 24px;
-            top: 50%;
-            transform: translateY(-50%);
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            z-index: 200;
-        }
-
-        .nav-dot {
-            width: 9px;
-            height: 9px;
-            border-radius: 50%;
-            background: var(--sage-light);
-            opacity: 0.4;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: none;
-            position: relative;
-        }
-
-        .nav-dot:hover, .nav-dot.active {
-            opacity: 1;
-            background: var(--sage);
-            transform: scale(1.4);
-        }
-
-        .nav-dot .tooltip {
-            position: absolute;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: var(--text-dark);
-            color: white;
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-size: 11px;
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.2s;
-            font-family: var(--font-body);
-        }
-
-        .nav-dot:hover .tooltip {
-            opacity: 1;
-        }
-
-        /* Typography */
-        h1 {
-            font-family: var(--font-display);
-            font-weight: 500;
-            font-size: 3.6rem;
-            line-height: 1.15;
-            color: var(--text-dark);
-            letter-spacing: -0.01em;
-        }
-
-        h2 {
-            font-family: var(--font-display);
-            font-weight: 500;
-            font-size: 2.8rem;
-            line-height: 1.2;
-            margin-bottom: 32px;
-            color: var(--text-dark);
-        }
-
-        h3 {
-            font-family: var(--font-display);
-            font-weight: 600;
-            font-size: 1.5rem;
-            margin-bottom: 12px;
-            color: var(--sage);
-        }
-
-        p, li {
-            font-family: var(--font-body);
-            font-size: 1.05rem;
-            line-height: 1.7;
-            color: var(--text-mid);
-            font-weight: 300;
-        }
-
-        .subtitle {
-            font-family: var(--font-display);
-            font-size: 1.4rem;
-            font-style: italic;
-            color: var(--text-light);
-            margin-top: 16px;
-            font-weight: 400;
-        }
-
-        .label {
-            font-family: var(--font-body);
-            font-size: 0.7rem;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            color: var(--sage);
-            font-weight: 500;
-            margin-bottom: 16px;
-        }
-
-        /* Slide-specific backgrounds */
-        .slide-title {
-            background: linear-gradient(160deg, var(--cream) 0%, var(--sage-bg) 100%);
-            text-align: center;
-            align-items: center;
-        }
-
-        .slide-title h1 {
-            font-size: 4.2rem;
-            margin-bottom: 8px;
-        }
-
-        .slide-vision {
-            background: linear-gradient(135deg, var(--sage-bg) 0%, #e8e4ef 100%);
-        }
-
-        .slide-pillars {
-            background: var(--warm-white);
-        }
-
-        .slide-investment {
-            background: linear-gradient(160deg, var(--cream) 0%, #f5f0e0 100%);
-        }
-
-        .slide-next {
-            background: linear-gradient(160deg, var(--sage-bg) 0%, var(--cream) 100%);
-            text-align: center;
-            align-items: center;
-        }
-
-        /* Content elements */
-        .card-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 28px;
-            margin-top: 36px;
-        }
-
-        .card {
-            background: white;
-            border-radius: 12px;
-            padding: 32px 28px;
-            border: 1px solid rgba(122, 140, 110, 0.12);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.06);
-        }
-
-        .card h3 {
-            font-size: 1.3rem;
-        }
-
-        .card p, .card li {
-            font-size: 0.95rem;
-        }
-
-        .card ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .card ul li {
-            padding: 5px 0;
-            padding-left: 16px;
-            position: relative;
-        }
-
-        .card ul li::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 13px;
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: var(--sage-light);
-        }
-
-        .two-col {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 48px;
-            margin-top: 32px;
-        }
-
-        .stat-row {
-            display: flex;
-            gap: 40px;
-            margin-top: 36px;
-        }
-
-        .stat {
-            text-align: center;
-        }
-
-        .stat .number {
-            font-family: var(--font-display);
-            font-size: 2.4rem;
-            font-weight: 600;
-            color: var(--gold);
-        }
-
-        .stat .desc {
-            font-size: 0.85rem;
-            color: var(--text-light);
-            margin-top: 4px;
-        }
-
-        .tier-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 32px;
-            margin-top: 36px;
-        }
-
-        .tier {
-            background: white;
-            border-radius: 12px;
-            padding: 36px 32px;
-            border: 1px solid rgba(122, 140, 110, 0.12);
-        }
-
-        .tier.featured {
-            border: 2px solid var(--sage);
-            position: relative;
-        }
-
-        .tier.featured::after {
-            content: 'Recommended';
-            position: absolute;
-            top: -11px;
-            left: 24px;
-            background: var(--sage);
-            color: white;
-            font-size: 0.7rem;
-            padding: 2px 12px;
-            border-radius: 10px;
-            font-weight: 500;
-            letter-spacing: 0.05em;
-        }
-
-        .tier h3 {
-            font-size: 1.4rem;
-            color: var(--text-dark);
-            font-family: var(--font-display);
-        }
-
-        .tier .tier-sub {
-            font-size: 0.85rem;
-            color: var(--text-light);
-            margin-bottom: 20px;
-            font-style: italic;
-        }
-
-        .tier ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .tier ul li {
-            padding: 6px 0;
-            padding-left: 20px;
-            position: relative;
-            font-size: 0.95rem;
-            color: var(--text-mid);
-        }
-
-        .tier ul li::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 13px;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--sage-light);
-        }
-
-        .timeline {
-            margin-top: 36px;
-        }
-
-        .timeline-block {
-            display: flex;
-            gap: 28px;
-            margin-bottom: 28px;
-            align-items: flex-start;
-        }
-
-        .timeline-label {
-            min-width: 120px;
-            font-family: var(--font-display);
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--sage);
-            padding-top: 2px;
-        }
-
-        .timeline-content {
-            flex: 1;
-            background: white;
-            border-radius: 10px;
-            padding: 24px;
-            border: 1px solid rgba(122, 140, 110, 0.1);
-        }
-
-        .timeline-content p {
-            font-size: 0.95rem;
-        }
-
-        .divider {
-            width: 48px;
-            height: 2px;
-            background: var(--gold-light);
-            margin: 20px 0;
-        }
-
-        .slide-title .divider {
-            margin: 20px auto;
-        }
-
-        .cta-link {
-            display: inline-block;
-            margin-top: 24px;
-            font-family: var(--font-body);
-            font-size: 0.9rem;
-            color: var(--sage);
-            text-decoration: none;
-            border-bottom: 1px solid var(--sage-light);
-            padding-bottom: 2px;
-            transition: color 0.2s;
-        }
-
-        .cta-link:hover {
-            color: var(--text-dark);
-        }
-
-        .pillar-num {
-            font-family: var(--font-display);
-            font-size: 4rem;
-            font-weight: 300;
-            color: var(--sage-light);
-            opacity: 0.5;
-            line-height: 1;
-            margin-bottom: 8px;
-        }
-
-        .book-stats {
-            display: flex;
-            gap: 24px;
-            margin-top: 28px;
-            flex-wrap: wrap;
-        }
-
-        .book-stat {
-            background: white;
-            border-radius: 10px;
-            padding: 20px 24px;
-            border: 1px solid rgba(122, 140, 110, 0.1);
-            text-align: center;
-            flex: 1;
-            min-width: 140px;
-        }
-
-        .book-stat .num {
-            font-family: var(--font-display);
-            font-size: 2rem;
-            font-weight: 600;
-            color: var(--gold);
-        }
-
-        .book-stat .lbl {
-            font-size: 0.8rem;
-            color: var(--text-light);
-            margin-top: 4px;
-        }
-
-        /* Staggered reveal for child elements */
-        .slide.visible .reveal {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .reveal {
-            opacity: 0;
-            transform: translateY(16px);
-            transition: opacity 0.5s ease, transform 0.5s ease;
-        }
-
-        .reveal:nth-child(1) { transition-delay: 0.1s; }
-        .reveal:nth-child(2) { transition-delay: 0.2s; }
-        .reveal:nth-child(3) { transition-delay: 0.3s; }
-        .reveal:nth-child(4) { transition-delay: 0.4s; }
-        .reveal:nth-child(5) { transition-delay: 0.5s; }
-        .reveal:nth-child(6) { transition-delay: 0.6s; }
-
-        /* Brand mark */
-        .brand {
-            position: fixed;
-            bottom: 24px;
-            left: 28px;
-            font-family: var(--font-body);
-            font-size: 0.7rem;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: var(--text-light);
-            opacity: 0.5;
-            z-index: 200;
-        }
-
-        /* Mobile */
-        @media (max-width: 768px) {
-            .slide {
-                padding: 40px 28px;
-            }
-
-            h1 { font-size: 2.4rem; }
-            .slide-title h1 { font-size: 2.8rem; }
-            h2 { font-size: 2rem; margin-bottom: 24px; }
-            h3 { font-size: 1.2rem; }
-
-            .card-grid {
-                grid-template-columns: 1fr;
-                gap: 16px;
-            }
-
-            .two-col {
-                grid-template-columns: 1fr;
-                gap: 24px;
-            }
-
-            .tier-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-
-            .stat-row {
-                flex-wrap: wrap;
-                gap: 20px;
-                justify-content: center;
-            }
-
-            .nav-dots {
-                right: 12px;
-                gap: 8px;
-            }
-
-            .nav-dot {
-                width: 7px;
-                height: 7px;
-            }
-
-            .nav-dot .tooltip {
-                display: none;
-            }
-
-            .timeline-block {
-                flex-direction: column;
-                gap: 8px;
-            }
-
-            .timeline-label {
-                min-width: auto;
-            }
-
-            .book-stats {
-                gap: 12px;
-            }
-
-            .book-stat {
-                min-width: 100px;
-                padding: 14px 16px;
-            }
-
-            .brand {
-                bottom: 12px;
-                left: 16px;
-                font-size: 0.6rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .slide { padding: 32px 20px; }
-            h1 { font-size: 2rem; }
-            .slide-title h1 { font-size: 2.2rem; }
-            h2 { font-size: 1.6rem; }
-            p, li { font-size: 0.95rem; }
-            .subtitle { font-size: 1.15rem; }
-            .card { padding: 20px 18px; }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            html { scroll-behavior: auto; }
-            .slide, .reveal {
-                opacity: 1;
-                transform: none;
-                transition: none;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Growing the Forgiveness Project — HireLoki</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--sage:#8fae8b;--gold:#c4a35a;--lavender:#b8a9c9;--white:#faf8f5;--text:#3a3a3a;--text-light:#6b6b6b}
+html,body{height:100%;overflow:hidden;font-family:'Inter',sans-serif;background:var(--white);color:var(--text)}
+h1,h2,h3{font-family:'Cormorant Garamond',serif;font-weight:600;color:var(--text)}
+
+/* Progress bar */
+#progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--sage),var(--gold));transition:width .4s ease;z-index:100}
+
+/* Slides */
+.deck{position:relative;width:100%;height:100%}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:2rem 3rem;opacity:0;pointer-events:none;transition:opacity .5s ease;text-align:center}
+.slide.active{opacity:1;pointer-events:auto}
+.slide.active .fade{animation:fadeUp .6s ease both}
+.slide.active .fade:nth-child(2){animation-delay:.15s}
+.slide.active .fade:nth-child(3){animation-delay:.3s}
+.slide.active .fade:nth-child(4){animation-delay:.45s}
+.slide.active .fade:nth-child(5){animation-delay:.6s}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+
+.slide h1{font-size:clamp(2rem,5vw,3.4rem);margin-bottom:.5rem;line-height:1.15}
+.slide h2{font-size:clamp(1.6rem,4vw,2.6rem);margin-bottom:1rem;line-height:1.2}
+.slide h3{font-size:clamp(1.1rem,2.5vw,1.5rem);margin-bottom:.8rem;color:var(--gold)}
+.slide p,.slide li{font-size:clamp(.9rem,1.8vw,1.1rem);line-height:1.7;color:var(--text-light);max-width:680px}
+.slide ul{text-align:left;list-style:none;padding:0;max-width:680px}
+.slide ul li{padding:.35rem 0;padding-left:1.2rem;position:relative}
+.slide ul li::before{content:'';position:absolute;left:0;top:.75rem;width:6px;height:6px;border-radius:50%;background:var(--sage)}
+
+.subtitle{font-family:'Inter',sans-serif;font-size:clamp(.95rem,2vw,1.2rem);color:var(--text-light);font-weight:300;margin-top:.3rem}
+.from{font-size:.9rem;color:var(--gold);margin-top:1.5rem;font-weight:500}
+.from a{color:var(--gold);text-decoration:none;border-bottom:1px solid var(--gold)}
+
+/* Decorative line */
+.divider{width:50px;height:2px;background:var(--gold);margin:1rem auto;border-radius:2px}
+
+/* Three pillars cards */
+.pillars{display:flex;gap:1.5rem;margin-top:1.2rem;flex-wrap:wrap;justify-content:center}
+.pillar{background:#fff;border-radius:12px;padding:1.5rem 1.2rem;flex:1;min-width:180px;max-width:240px;box-shadow:0 2px 12px rgba(0,0,0,.06);border-top:3px solid var(--sage);text-align:left}
+.pillar:nth-child(2){border-top-color:var(--gold)}
+.pillar:nth-child(3){border-top-color:var(--lavender)}
+.pillar h3{font-size:1.15rem;margin-bottom:.4rem}
+.pillar p{font-size:.88rem}
+
+/* Two-tier cards */
+.tiers{display:flex;gap:1.5rem;margin-top:1.2rem;flex-wrap:wrap;justify-content:center}
+.tier{background:#fff;border-radius:12px;padding:1.8rem 1.5rem;flex:1;min-width:240px;max-width:320px;box-shadow:0 2px 12px rgba(0,0,0,.06);text-align:left}
+.tier.featured{border:2px solid var(--gold)}
+.tier h3{font-size:1.2rem;margin-bottom:.6rem}
+.tier p,.tier li{font-size:.88rem}
+.tier ul{margin-top:.5rem}
+
+/* Timeline */
+.timeline{text-align:left;max-width:600px;margin-top:.5rem}
+.timeline .phase{padding:.6rem 0 .6rem 1.5rem;border-left:2px solid var(--sage);position:relative}
+.timeline .phase::before{content:'';position:absolute;left:-5px;top:.85rem;width:8px;height:8px;border-radius:50%;background:var(--sage)}
+.timeline .phase:nth-child(2)::before{background:var(--gold)}
+.timeline .phase:nth-child(3)::before{background:var(--lavender)}
+.timeline .phase:nth-child(4)::before{background:var(--gold)}
+.timeline .phase h3{font-size:1rem;margin-bottom:.2rem}
+.timeline .phase p{font-size:.88rem}
+
+.note{font-style:italic;color:var(--sage);margin-top:1rem;font-size:.92rem}
+
+/* Nav dots */
+#dots{position:fixed;bottom:1.2rem;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:100}
+#dots span{width:10px;height:10px;border-radius:50%;background:#d4d0cb;cursor:pointer;transition:all .3s}
+#dots span.active{background:var(--sage);transform:scale(1.25)}
+
+@media(max-width:600px){
+  .slide{padding:1.5rem 1.2rem}
+  .pillars,.tiers{flex-direction:column;align-items:center}
+  .pillar,.tier{max-width:100%;min-width:0}
+}
+</style>
 </head>
 <body>
 
-<div class="progress-bar" id="progress"></div>
+<div id="progress"></div>
+<div class="deck" id="deck">
 
-<nav class="nav-dots" id="navDots"></nav>
+<!-- Slide 1 -->
+<div class="slide active">
+  <h1 class="fade">Growing the Forgiveness Project</h1>
+  <div class="divider fade"></div>
+  <p class="subtitle fade">A digital strategy proposal for Luca Oake</p>
+  <p class="from fade">from <a href="https://hireloki.com">HireLoki</a></p>
+</div>
 
-<div class="brand">HireLoki</div>
+<!-- Slide 2 -->
+<div class="slide">
+  <h2 class="fade">We Get It</h2>
+  <div class="divider fade"></div>
+  <p class="fade">Forgiveness is intangible, hard to market, harder to scale. You're a solopreneur wearing every hat. You need a partner who thinks strategically AND executes.</p>
+  <p class="fade" style="margin-top:.8rem;color:var(--gold);font-weight:500">That's what we do — AI-powered agency for one.</p>
+</div>
 
-<!-- Slide 1: Title -->
-<section class="slide slide-title" data-title="Introduction">
-    <div class="reveal">
-        <p class="label">A Digital Strategy Proposal</p>
-    </div>
-    <h1 class="reveal">Growing the<br>Forgiveness Project</h1>
-    <div class="divider reveal"></div>
-    <p class="subtitle reveal">Prepared for Luca Oake</p>
-    <p class="reveal" style="margin-top: 32px; font-size: 0.85rem; color: var(--text-light);">From HireLoki &mdash; an AI-powered agency built for solopreneurs</p>
-</section>
+<!-- Slide 3 -->
+<div class="slide">
+  <h2 class="fade">Where You Are</h2>
+  <div class="divider fade"></div>
+  <ul class="fade">
+    <li>Book nearly published (great foundation)</li>
+    <li>Ghost site with content but no traffic</li>
+    <li>Instagram planned but not launched</li>
+    <li>One LinkedIn post = entire marketing history</li>
+    <li>Tons of potential, zero bandwidth to activate it</li>
+  </ul>
+</div>
 
-<!-- Slide 2: We Get It -->
-<section class="slide" data-title="We Get It">
-    <h2 class="reveal">We get it.</h2>
-    <div class="two-col">
-        <div class="reveal">
-            <p>Forgiveness is deeply personal. It's intangible, hard to package, and harder still to market without losing its meaning. Most agencies wouldn't know where to begin.</p>
-            <div class="divider"></div>
-            <p>You're a solopreneur wearing every hat &mdash; writer, strategist, designer, marketer, community builder. The work itself is meaningful. The bandwidth to promote it doesn't exist.</p>
-        </div>
-        <div class="reveal">
-            <p>You don't need a traditional agency. You need a partner who thinks <em>and</em> executes. Someone who understands the nuance of your message and can translate it into reach.</p>
-            <div class="divider"></div>
-            <p style="color: var(--sage); font-weight: 400;">Loki is an AI-powered agency designed for exactly this &mdash; strategic thinking paired with tireless execution, built around a single client: you.</p>
-        </div>
-    </div>
-</section>
+<!-- Slide 4 -->
+<div class="slide">
+  <h2 class="fade">The Vision</h2>
+  <div class="divider fade"></div>
+  <ul class="fade">
+    <li>Forgiveness as a recognized wellness practice (like meditation was 10 years ago)</li>
+    <li>Luca positioned as THE voice</li>
+    <li>10K+ engaged Instagram followers</li>
+    <li>Speaking invitations and thought leadership</li>
+    <li>Book as entry point to a full ecosystem</li>
+  </ul>
+</div>
 
-<!-- Slide 3: Where You Are Now -->
-<section class="slide" data-title="Where You Are">
-    <h2 class="reveal">Where you are now</h2>
-    <p class="reveal" style="max-width: 600px; margin-bottom: 32px;">You've built something real. The foundation is there. What's missing is the infrastructure to let people find it.</p>
-    <div class="card-grid">
-        <div class="card reveal">
-            <h3>The Book</h3>
-            <p>Nearly published. Years of work distilled into something tangible &mdash; the cornerstone of everything that follows.</p>
-        </div>
-        <div class="card reveal">
-            <h3>Ghost Site</h3>
-            <p>Content exists, but traffic doesn't. The articles are good. The distribution is absent.</p>
-        </div>
-        <div class="card reveal">
-            <h3>Social Presence</h3>
-            <p>Instagram planned but not launched. One LinkedIn post comprises the entire marketing history. A blank canvas, not a deficit.</p>
-        </div>
+<!-- Slide 5 -->
+<div class="slide">
+  <h2 class="fade">Three Pillars</h2>
+  <div class="divider fade"></div>
+  <div class="pillars fade">
+    <div class="pillar">
+      <h3>Platform</h3>
+      <p>Build the digital home. Website, social, tools — all working together.</p>
     </div>
-    <p class="reveal" style="margin-top: 28px; font-style: italic; color: var(--text-light);">Tons of potential. Zero bandwidth. That's what we're here to change.</p>
-</section>
+    <div class="pillar">
+      <h3>Content</h3>
+      <p>Consistent, quality content across every channel. Derived from your voice.</p>
+    </div>
+    <div class="pillar">
+      <h3>Growth</h3>
+      <p>Audience building, collaborations, speaking opportunities.</p>
+    </div>
+  </div>
+</div>
 
-<!-- Slide 4: The Vision -->
-<section class="slide slide-vision" data-title="The Vision">
-    <h2 class="reveal">The vision</h2>
-    <p class="reveal" style="max-width: 640px; font-size: 1.15rem; line-height: 1.8;">Ten years ago, meditation was niche &mdash; something monks did, not executives. Today it's a billion-dollar wellness category. Forgiveness is next. Not as self-help cliche, but as genuine life skill.</p>
-    <div class="divider reveal"></div>
-    <div class="stat-row reveal">
-        <div class="stat">
-            <div class="number">10K+</div>
-            <div class="desc">Instagram community</div>
-        </div>
-        <div class="stat">
-            <div class="number">THE</div>
-            <div class="desc">voice on forgiveness</div>
-        </div>
-        <div class="stat">
-            <div class="number">Speaking</div>
-            <div class="desc">invitations &amp; stages</div>
-        </div>
-        <div class="stat">
-            <div class="number">Ecosystem</div>
-            <div class="desc">book, content, community</div>
-        </div>
-    </div>
-    <p class="reveal" style="margin-top: 36px; color: var(--text-mid);">The book isn't the end product. It's the entry point to a full ecosystem &mdash; with Luca at the center.</p>
-</section>
+<!-- Slide 6 -->
+<div class="slide">
+  <h2 class="fade">Platform</h2>
+  <div class="divider fade"></div>
+  <ul class="fade">
+    <li><strong>Ghost site redesign:</strong> clean signup for invite-only Instagram, book promo, content hub</li>
+    <li><strong>Instagram launch:</strong> invite-only ($25), curated exclusive content</li>
+    <li><strong>LinkedIn:</strong> professional forgiveness content</li>
+    <li><strong>Book-powered chatbot:</strong> let people "talk to the book"</li>
+  </ul>
+</div>
 
-<!-- Slide 5: Strategy: Three Pillars -->
-<section class="slide slide-pillars" data-title="Strategy">
-    <p class="label reveal">The Strategy</p>
-    <h2 class="reveal">Three pillars</h2>
-    <div class="card-grid">
-        <div class="card reveal">
-            <div class="pillar-num">1</div>
-            <h3>Platform</h3>
-            <p>Build the digital home. Redesign the Ghost site, launch Instagram, establish LinkedIn &mdash; create the places where your audience will live.</p>
-        </div>
-        <div class="card reveal">
-            <div class="pillar-num">2</div>
-            <h3>Content</h3>
-            <p>Consistent, quality content across every channel. Weekly cadence. Your voice, amplified &mdash; not replaced. Loki creates, Luca approves.</p>
-        </div>
-        <div class="card reveal">
-            <div class="pillar-num">3</div>
-            <h3>Growth</h3>
-            <p>Audience building, influencer collaborations, speaking pipeline, SEO. Turning visibility into community.</p>
-        </div>
-    </div>
-</section>
+<!-- Slide 7 -->
+<div class="slide">
+  <h2 class="fade">Content Engine</h2>
+  <div class="divider fade"></div>
+  <ul class="fade">
+    <li><strong>Ghost:</strong> ungated articles for SEO and reference library</li>
+    <li><strong>Instagram:</strong> exclusive content driving $25 signups</li>
+    <li><strong>LinkedIn:</strong> thought leadership for professional audiences</li>
+    <li>Weekly calendar across all channels</li>
+    <li>All derived from book + Luca's voice</li>
+    <li><strong>We create, you approve</strong></li>
+  </ul>
+</div>
 
-<!-- Slide 6: Pillar 1: Platform -->
-<section class="slide" data-title="Platform">
-    <div class="pillar-num reveal">1</div>
-    <h2 class="reveal">Platform</h2>
-    <p class="reveal" style="max-width: 560px; margin-bottom: 28px;">Before content or growth, we need a home worth visiting. Every touchpoint should feel intentional, warm, and unmistakably Luca.</p>
-    <div class="card-grid reveal">
-        <div class="card">
-            <h3>Ghost Site Redesign</h3>
-            <p>Clean layout, clear signup flow, email capture that actually converts. Your content deserves better packaging.</p>
-        </div>
-        <div class="card">
-            <h3>Instagram Launch</h3>
-            <p>Invite-only at $25 &mdash; exclusivity creates value. Curated content for a community that opts in deliberately.</p>
-        </div>
-        <div class="card">
-            <h3>LinkedIn Presence</h3>
-            <p>Professional profile that positions you as a thought leader. The corporate world needs forgiveness too.</p>
-        </div>
-    </div>
-    <div class="card reveal" style="margin-top: 20px; max-width: 420px; border-left: 3px solid var(--gold-light);">
-        <h3 style="color: var(--gold);">Book-to-RAG Chatbot</h3>
-        <p>"Talk to the book" &mdash; an AI chatbot trained on your manuscript. Readers ask questions, your book answers. A genuinely novel touchpoint.</p>
-    </div>
-</section>
+<!-- Slide 8 -->
+<div class="slide">
+  <h2 class="fade">Growth</h2>
+  <div class="divider fade"></div>
+  <ul class="fade">
+    <li>Influencer collaborations + cross-promo</li>
+    <li>Speaking opportunity research and outreach</li>
+    <li>SEO for Ghost site</li>
+    <li>Book launch amplification</li>
+    <li>Email list building from site visitors</li>
+  </ul>
+</div>
 
-<!-- Slide 7: Pillar 2: Content Engine -->
-<section class="slide" data-title="Content Engine">
-    <div class="pillar-num reveal">2</div>
-    <h2 class="reveal">Content Engine</h2>
-    <p class="reveal" style="max-width: 600px; margin-bottom: 28px;">One book. Three channels. Infinite content. Everything flows from your voice and your ideas &mdash; Loki structures, drafts, and schedules. You approve.</p>
-    <div class="two-col">
-        <div class="reveal">
-            <div class="card" style="margin-bottom: 16px;">
-                <h3>Ghost Articles</h3>
-                <p>Ungated, SEO-optimized longform. The front door &mdash; people discover you through search, stay for the depth.</p>
-            </div>
-            <div class="card">
-                <h3>LinkedIn</h3>
-                <p>Thought leadership posts. Shorter, sharper, professional-facing. Positions you in wellness and corporate circles alike.</p>
-            </div>
-        </div>
-        <div class="reveal">
-            <div class="card" style="margin-bottom: 16px;">
-                <h3>Instagram (Exclusive)</h3>
-                <p>Behind-the-scenes, deeper reflections, community Q&amp;A. The content people pay $25 to access.</p>
-            </div>
-            <div class="card" style="background: var(--sage-bg); border-color: transparent;">
-                <h3>Weekly Calendar</h3>
-                <p>Structured cadence across all channels. No scrambling, no gaps. Consistent presence builds trust.</p>
-            </div>
-        </div>
-    </div>
-</section>
+<!-- Slide 9 -->
+<div class="slide">
+  <h2 class="fade">The Book as Engine</h2>
+  <div class="divider fade"></div>
+  <ul class="fade">
+    <li><strong>RAG-powered chatbot:</strong> "Ask the Book" — interactive Q&A from the text</li>
+    <li>Mine 50+ social posts, 20+ articles, 10+ LinkedIn pieces from content</li>
+    <li>Audiobook clips for reels and stories</li>
+  </ul>
+  <p class="note fade">One asset, infinite content.</p>
+</div>
 
-<!-- Slide 8: Pillar 3: Growth -->
-<section class="slide" data-title="Growth">
-    <div class="pillar-num reveal">3</div>
-    <h2 class="reveal">Growth</h2>
-    <p class="reveal" style="max-width: 560px; margin-bottom: 32px;">Good content without distribution is a diary. Growth is what turns your message into a movement.</p>
-    <div class="card-grid">
-        <div class="card reveal">
-            <h3>Influencer Collaborations</h3>
-            <p>Identify and reach out to aligned voices in wellness, mindfulness, and personal development. Cross-pollinate audiences.</p>
-        </div>
-        <div class="card reveal">
-            <h3>Speaking Pipeline</h3>
-            <p>Research and pitch speaking opportunities &mdash; podcasts, conferences, workshops. Get forgiveness on stages where it matters.</p>
-        </div>
-        <div class="card reveal">
-            <h3>SEO &amp; Email</h3>
-            <p>Optimize Ghost for organic search. Build an email list that compounds. Every visitor should have a reason to come back.</p>
-        </div>
+<!-- Slide 10 -->
+<div class="slide">
+  <h2 class="fade">Month by Month</h2>
+  <div class="divider fade"></div>
+  <div class="timeline fade">
+    <div class="phase">
+      <h3>Month 1</h3>
+      <p>Ghost refresh, Instagram setup, content calendar, book launch</p>
     </div>
-    <p class="reveal" style="margin-top: 24px; color: var(--text-light); font-size: 0.9rem;">Book launch amplification ties all three together &mdash; a coordinated push across every channel, timed for maximum impact.</p>
-</section>
+    <div class="phase">
+      <h3>Months 2 - 3</h3>
+      <p>Content engine running, growth begins, LinkedIn cadence</p>
+    </div>
+    <div class="phase">
+      <h3>Months 4 - 6</h3>
+      <p>Influencer collabs, speaking pitches, community building</p>
+    </div>
+    <div class="phase">
+      <h3>Ongoing</h3>
+      <p>Weekly content, platform management, strategy refinement</p>
+    </div>
+  </div>
+</div>
 
-<!-- Slide 9: The Book as Engine -->
-<section class="slide" data-title="The Book as Engine">
-    <h2 class="reveal">The book as engine</h2>
-    <p class="reveal" style="max-width: 600px; margin-bottom: 28px;">Your manuscript isn't just a product &mdash; it's an inexhaustible content source. One book can fuel months of presence across every channel.</p>
-    <div class="book-stats reveal">
-        <div class="book-stat">
-            <div class="num">50+</div>
-            <div class="lbl">Social posts</div>
-        </div>
-        <div class="book-stat">
-            <div class="num">20+</div>
-            <div class="lbl">Ghost articles</div>
-        </div>
-        <div class="book-stat">
-            <div class="num">10+</div>
-            <div class="lbl">LinkedIn pieces</div>
-        </div>
-        <div class="book-stat">
-            <div class="num">1</div>
-            <div class="lbl">AI chatbot</div>
-        </div>
+<!-- Slide 11 -->
+<div class="slide">
+  <h2 class="fade">Investment</h2>
+  <div class="divider fade"></div>
+  <div class="tiers fade">
+    <div class="tier">
+      <h3>Content &amp; Management</h3>
+      <ul>
+        <li>Content creation across channels</li>
+        <li>Posting and scheduling</li>
+        <li>Platform management</li>
+      </ul>
     </div>
-    <div class="two-col reveal" style="margin-top: 32px;">
-        <div>
-            <h3>Mine the manuscript</h3>
-            <p>Every chapter, every insight, every story becomes standalone content. Repurposed thoughtfully &mdash; not copied and pasted. Each piece stands on its own while drawing people back to the source.</p>
-        </div>
-        <div>
-            <h3>"Ask the Book"</h3>
-            <p>A RAG-powered chatbot trained on your manuscript. Visitors ask real questions about forgiveness and get answers grounded in your work. Audiobook clips become Instagram Reels. The book never stops working.</p>
-        </div>
+    <div class="tier featured">
+      <h3 style="color:var(--gold)">Full Strategy</h3>
+      <ul>
+        <li>Everything in Content &amp; Management</li>
+        <li>Growth strategy and execution</li>
+        <li>Speaking outreach</li>
+        <li>Book-powered chatbot build</li>
+      </ul>
     </div>
-</section>
+  </div>
+  <p class="note fade">Fraction of traditional agency cost. AI-powered efficiency. Human strategic thinking.</p>
+</div>
 
-<!-- Slide 10: Month by Month -->
-<section class="slide" data-title="Timeline">
-    <h2 class="reveal">Month by month</h2>
-    <div class="timeline">
-        <div class="timeline-block reveal">
-            <div class="timeline-label">Month 1</div>
-            <div class="timeline-content">
-                <p><strong>Foundation.</strong> Ghost site refresh and signup flow. Instagram account setup and initial content. Content calendar established. Book launch coordination begins.</p>
-            </div>
-        </div>
-        <div class="timeline-block reveal">
-            <div class="timeline-label">Months 2-3</div>
-            <div class="timeline-content">
-                <p><strong>Engine running.</strong> Weekly content publishing across all channels. SEO optimization taking hold. Email list growing. LinkedIn thought leadership cadence established. First audience metrics to review.</p>
-            </div>
-        </div>
-        <div class="timeline-block reveal">
-            <div class="timeline-label">Months 4-6</div>
-            <div class="timeline-content">
-                <p><strong>Growth phase.</strong> Influencer collaborations underway. Speaking opportunity pitches sent. Community building on Instagram. RAG chatbot live. Real momentum, measurable results.</p>
-            </div>
-        </div>
-    </div>
-</section>
+<!-- Slide 12 -->
+<div class="slide">
+  <h2 class="fade">Next Steps</h2>
+  <div class="divider fade"></div>
+  <ul class="fade">
+    <li>Finish book publication</li>
+    <li>Reconnect to finalize scope</li>
+    <li>Quick wins we can start immediately</li>
+  </ul>
+  <p class="fade" style="margin-top:1.5rem;font-weight:500;color:var(--gold)">mike@mamv.co &nbsp;|&nbsp; <a href="https://hireloki.com" style="color:var(--gold)">hireloki.com</a></p>
+</div>
 
-<!-- Slide 11: Investment -->
-<section class="slide slide-investment" data-title="Investment">
-    <h2 class="reveal">Investment</h2>
-    <p class="reveal" style="max-width: 560px; margin-bottom: 8px;">Flexible engagement designed around where you are and where you want to go. A fraction of traditional agency cost, with the strategic depth of one.</p>
-    <div class="tier-grid">
-        <div class="tier reveal">
-            <h3>Content &amp; Management</h3>
-            <p class="tier-sub">The essentials, done consistently</p>
-            <ul>
-                <li>Weekly content across Ghost, Instagram, LinkedIn</li>
-                <li>Content calendar and scheduling</li>
-                <li>Ghost site refresh</li>
-                <li>Monthly performance review</li>
-                <li>Email list setup and management</li>
-            </ul>
-        </div>
-        <div class="tier featured reveal">
-            <h3>Full Strategy &amp; Growth</h3>
-            <p class="tier-sub">Everything in Tier 1, plus momentum</p>
-            <ul>
-                <li>Everything in Content &amp; Management</li>
-                <li>Growth strategy and execution</li>
-                <li>Influencer outreach and collaborations</li>
-                <li>Speaking opportunity pipeline</li>
-                <li>Book-to-RAG chatbot build</li>
-                <li>SEO strategy and implementation</li>
-            </ul>
-        </div>
-    </div>
-    <p class="reveal" style="margin-top: 28px; font-size: 0.9rem; color: var(--text-light);">AI efficiency means human-quality strategy without human-scale overhead. Your investment goes to outcomes, not billable hours.</p>
-</section>
+</div>
 
-<!-- Slide 12: Next Steps -->
-<section class="slide slide-next" data-title="Next Steps">
-    <h2 class="reveal">Next steps</h2>
-    <div class="divider reveal"></div>
-    <div class="reveal" style="max-width: 500px; text-align: left; margin: 0 auto;">
-        <p style="margin-bottom: 16px;"><strong style="color: var(--sage);">1.</strong> Finish the book &mdash; everything builds from there.</p>
-        <p style="margin-bottom: 16px;"><strong style="color: var(--sage);">2.</strong> Reconnect to scope the engagement &mdash; Tier 1, Tier 2, or something custom.</p>
-        <p style="margin-bottom: 16px;"><strong style="color: var(--sage);">3.</strong> Quick wins are available now &mdash; Ghost cleanup, content calendar, Instagram setup.</p>
-    </div>
-    <div class="divider reveal"></div>
-    <p class="reveal" style="margin-top: 24px; font-family: var(--font-display); font-size: 1.3rem; color: var(--text-mid); font-style: italic;">The world is ready for this conversation.<br>Let's make sure they can find it.</p>
-    <div class="reveal" style="margin-top: 36px;">
-        <a href="mailto:mike@mamv.co" class="cta-link">mike@mamv.co</a>
-        <span style="margin: 0 12px; color: var(--text-light);">/</span>
-        <a href="https://hireloki.com" class="cta-link">hireloki.com</a>
-    </div>
-</section>
+<div id="dots"></div>
 
 <script>
-(function() {
-    const slides = document.querySelectorAll('.slide');
-    const navDotsContainer = document.getElementById('navDots');
-    const progressBar = document.getElementById('progress');
-    let currentSlide = 0;
-    let isNavigating = false;
+(function(){
+  const slides=document.querySelectorAll('.slide');
+  const dotsC=document.getElementById('dots');
+  const prog=document.getElementById('progress');
+  let cur=0,startX=0;
+  const n=slides.length;
 
-    // Build nav dots
-    slides.forEach((slide, i) => {
-        const dot = document.createElement('button');
-        dot.className = 'nav-dot';
-        dot.dataset.slide = i;
-        dot.setAttribute('aria-label', slide.dataset.title || 'Slide ' + (i + 1));
-        const tooltip = document.createElement('span');
-        tooltip.className = 'tooltip';
-        tooltip.textContent = slide.dataset.title || 'Slide ' + (i + 1);
-        dot.appendChild(tooltip);
-        navDotsContainer.appendChild(dot);
-    });
+  // build dots
+  for(let i=0;i<n;i++){
+    const d=document.createElement('span');
+    if(i===0)d.classList.add('active');
+    d.addEventListener('click',()=>go(i));
+    dotsC.appendChild(d);
+  }
+  const dots=dotsC.querySelectorAll('span');
 
-    const navDots = document.querySelectorAll('.nav-dot');
+  function go(i){
+    if(i<0||i>=n)return;
+    slides[cur].classList.remove('active');
+    dots[cur].classList.remove('active');
+    cur=i;
+    slides[cur].classList.add('active');
+    dots[cur].classList.add('active');
+    prog.style.width=((cur/(n-1))*100)+'%';
+  }
 
-    function goToSlide(index, smooth) {
-        if (smooth === undefined) smooth = true;
-        if (index < 0 || index >= slides.length || isNavigating) return;
-        isNavigating = true;
-        slides[index].classList.add('visible');
-        slides[index].scrollIntoView({ behavior: smooth ? 'smooth' : 'auto' });
-        currentSlide = index;
-        updateNav();
-        updateProgress();
-        setTimeout(function() { isNavigating = false; }, smooth ? 600 : 100);
-    }
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key==='ArrowDown')go(cur+1);
+    if(e.key==='ArrowLeft'||e.key==='ArrowUp')go(cur-1);
+  });
 
-    var observer = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-            if (entry.isIntersecting && !isNavigating) {
-                entry.target.classList.add('visible');
-                var index = Array.from(slides).indexOf(entry.target);
-                if (index !== currentSlide) {
-                    currentSlide = index;
-                    updateNav();
-                    updateProgress();
-                }
-            }
-        });
-    }, { threshold: 0.3 });
-
-    slides.forEach(function(slide) { observer.observe(slide); });
-
-    function updateNav() {
-        navDots.forEach(function(dot, i) {
-            dot.classList.toggle('active', i === currentSlide);
-        });
-    }
-
-    function updateProgress() {
-        var progress = ((currentSlide + 1) / slides.length) * 100;
-        progressBar.style.width = progress + '%';
-    }
-
-    navDots.forEach(function(dot) {
-        dot.addEventListener('click', function() {
-            goToSlide(parseInt(dot.dataset.slide));
-        });
-    });
-
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ') {
-            e.preventDefault();
-            goToSlide(currentSlide + 1);
-        } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
-            e.preventDefault();
-            goToSlide(currentSlide - 1);
-        }
-    });
-
-    var touchStartY = 0;
-    document.addEventListener('touchstart', function(e) {
-        touchStartY = e.touches[0].clientY;
-    }, { passive: true });
-
-    document.addEventListener('touchend', function(e) {
-        var diff = touchStartY - e.changedTouches[0].clientY;
-        if (Math.abs(diff) > 50) {
-            goToSlide(currentSlide + (diff > 0 ? 1 : -1));
-        }
-    }, { passive: true });
-
-    // Initial state
-    slides[0].classList.add('visible');
-    updateNav();
-    updateProgress();
+  // touch swipe
+  document.addEventListener('touchstart',e=>{startX=e.touches[0].clientX},{passive:true});
+  document.addEventListener('touchend',e=>{
+    const dx=e.changedTouches[0].clientX-startX;
+    if(Math.abs(dx)>50){dx<0?go(cur+1):go(cur-1)}
+  },{passive:true});
 })();
 </script>
-
 </body>
 </html>
